@@ -13,7 +13,9 @@ Reader: http://rfidshop.net/em4100tk4100so-117845em4305-lf-rfid-moduledthink302t
 Command format
 --------------
 Header + Length + Device identifier code + Command + Parameters + Checksum
+
 Header:            2BYTE,0xAABB
+
 Length:            2BYTE,Identification from the device identifier code to check word, The
                    first byte is valid,Second byteis reserved 0 
 device identifier code: 2BYTE, 0x0000
