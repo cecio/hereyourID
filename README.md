@@ -32,10 +32,9 @@ Header + Length + Device identifier code + Command + Status + Parameters + Check
 
 Header:            2BYTE,0xAABB
 
-Length:            2BYTE,Identification from the device identifier code to check word, The
+Length:            2BYTE,Identification from the device identifier code to check word, The first byte is valid,Second byteis reserved 0
 
-                   first byte is valid,Second byteis reserved 0
-device identifier code: 2BYTE, 0x0000
+Device identifier code: 2BYTE, 0x0000
 
 Command:           2BYTE, Identifies the coding command functions
 
