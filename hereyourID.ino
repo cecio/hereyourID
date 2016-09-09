@@ -44,7 +44,7 @@
  *                                      CRC(2 Bytes) +
  *                                      Trailer(3 Bytes)
  *
- * $Id: hereyourID.ino,v 2.4 2016/09/09 15:11:37 cesare Exp cesare $
+ * $Id: hereyourID.ino,v 2.5 2016/09/09 16:51:48 cesare Exp cesare $
  *
  **********************************************************************/
 
@@ -103,7 +103,7 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.clearDisplay();
 	display.setCursor(0,0);
-	display.println("hereyourID v2.4");
+	display.println("hereyourID v2.5");
 	display.display();
 	delay(2000);
 }
@@ -162,7 +162,7 @@ void loop() {
 				display.println(animalId);
 				display.display();
 
-				flashLED(255,0,0,1000,5);
+				flashLED(255,0,0,1000,3);
 			}
 		}
 		else
