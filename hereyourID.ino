@@ -44,7 +44,7 @@
  *                                      CRC(2 Bytes) +
  *                                      Trailer(3 Bytes)
  *
- * $Id: hereyourID.ino,v 2.7 2016/09/25 09:13:08 cesare Exp cesare $
+ * $Id: hereyourID.ino,v 2.8 2016/09/25 10:19:03 cesare Exp cesare $
  *
  **********************************************************************/
 
@@ -116,25 +116,25 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.clearDisplay();
 	display.setCursor(0,0);
-	display.println("hereyourID v2.7");
+	display.println("hereyourID v2.8");
 	display.display();
 	delay(2000);
-  
+
 #elif defined(OLED_SEEED)
 
-  // Init SEEED display 
-  Wire.begin();
-  SeeedOled.init();  //initialze SEEED OLED display
-  DDRB|=0x21;        
-  PORTB |= 0x21;
+	// Init SEEED display
+	Wire.begin();
+	SeeedOled.init(); //initialze SEEED OLED display
+	DDRB|=0x21;
+	PORTB |= 0x21;
 
-  rotateOLED();
-  SeeedOled.clearDisplay();      // clear the screen and set start position to top left corner
-  SeeedOled.setNormalDisplay();  // Set display to normal mode (i.e non-inverse mode)
-  SeeedOled.setPageMode();       // Set addressing mode to Page Mode
-  SeeedOled.setTextXY(3,0);      // Set the cursor to Xth Page, Yth Column  
-  SeeedOled.putString("hereyourID v2.7");
-  delay(3000);
+	rotateOLED();
+	SeeedOled.clearDisplay(); // clear the screen and set start position to top left corner
+	SeeedOled.setNormalDisplay(); // Set display to normal mode (i.e non-inverse mode)
+	SeeedOled.setPageMode(); // Set addressing mode to Page Mode
+	SeeedOled.setTextXY(3,0); // Set the cursor to Xth Page, Yth Column
+	SeeedOled.putString("hereyourID v2.8");
+	delay(3000);
 
 #endif
 
@@ -198,15 +198,15 @@ void loop() {
 
 #elif defined(OLED_SEEED)
 
-        SeeedOled.clearDisplay();
-        SeeedOled.setTextXY(1,0);  
-        SeeedOled.putString("Country:");
-        SeeedOled.setTextXY(2,0);  
-        SeeedOled.putString(countryId.c_str());
-        SeeedOled.setTextXY(4,0);  
-        SeeedOled.putString("ID:");
-        SeeedOled.setTextXY(5,0);  
-        SeeedOled.putString(animalId.c_str());
+				SeeedOled.clearDisplay();
+				SeeedOled.setTextXY(1,0);
+				SeeedOled.putString("Country:");
+				SeeedOled.setTextXY(2,0);
+				SeeedOled.putString(countryId.c_str());
+				SeeedOled.setTextXY(4,0);
+				SeeedOled.putString("ID:");
+				SeeedOled.setTextXY(5,0);
+				SeeedOled.putString(animalId.c_str());
 
 #endif
 
@@ -434,14 +434,14 @@ char hexCharToDec( char c )
 // Kludge to rotate the Grove screen by 180 deg. Use if needed
 void rotateOLED(void)
 {
-  SeeedOled.sendCommand(0xA8);
-  SeeedOled.sendCommand(0x3F);
-  
-  SeeedOled.sendCommand(0xA0);
-  SeeedOled.sendCommand(0xC9);
-  
-  SeeedOled.sendCommand(0xA0);
-  SeeedOled.sendCommand(0xA1);  
+	SeeedOled.sendCommand(0xA8);
+	SeeedOled.sendCommand(0x3F);
+
+	SeeedOled.sendCommand(0xA0);
+	SeeedOled.sendCommand(0xC9);
+
+	SeeedOled.sendCommand(0xA0);
+	SeeedOled.sendCommand(0xA1);
 }
 
 #endif
