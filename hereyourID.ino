@@ -44,22 +44,33 @@
  *                                      CRC(2 Bytes) +
  *                                      Trailer(3 Bytes)
  *
- * $Id: hereyourID.ino,v 2.5 2016/09/09 16:51:48 cesare Exp cesare $
+ * $Id: hereyourID.ino,v 2.7 2016/09/25 09:13:08 cesare Exp cesare $
  *
  **********************************************************************/
 
 // #define DEBUG
+// #define OLED_ADAF
+#define OLED_SEEED
 
 #define MAXBUFFER 30
+
+#ifdef OLED_ADAF
 
 #include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <SoftwareSerial.h>
-#include <Adafruit_NeoPixel.h>
-
 #define OLED_RESET 6
 Adafruit_SSD1306 display(OLED_RESET);
+
+#elif defined(OLED_SEEED)
+
+#include <Wire.h>
+#include <SeeedOLED.h>
+
+#endif
+
+#include <SoftwareSerial.h>
+#include <Adafruit_NeoPixel.h>
 
 // SoftwareSerial reader(9,10);       // Rx, Tx
 SoftwareSerial reader(10,9);       // Rx, Tx
@@ -87,6 +98,8 @@ void setup() {
 	strip.begin();
 	strip.show(); // Initialize all pixels to 'off'
 
+#ifdef OLED_ADAF
+
 	// Init display
 	// by default, we'll generate the high voltage from the 3.3v line internally! (neat!)
 	display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // initialize with the I2C addr 0x3C (for the 128x32)
@@ -103,9 +116,28 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.clearDisplay();
 	display.setCursor(0,0);
-	display.println("hereyourID v2.5");
+	display.println("hereyourID v2.7");
 	display.display();
 	delay(2000);
+  
+#elif defined(OLED_SEEED)
+
+  // Init SEEED display 
+  Wire.begin();
+  SeeedOled.init();  //initialze SEEED OLED display
+  DDRB|=0x21;        
+  PORTB |= 0x21;
+
+  rotateOLED();
+  SeeedOled.clearDisplay();      // clear the screen and set start position to top left corner
+  SeeedOled.setNormalDisplay();  // Set display to normal mode (i.e non-inverse mode)
+  SeeedOled.setPageMode();       // Set addressing mode to Page Mode
+  SeeedOled.setTextXY(3,0);      // Set the cursor to Xth Page, Yth Column  
+  SeeedOled.putString("hereyourID v2.7");
+  delay(3000);
+
+#endif
+
 }
 
 void loop() {
@@ -152,6 +184,8 @@ void loop() {
 #endif
 				loadId(replyMod,i);
 
+#ifdef OLED_ADAF
+
 				// Show the red info
 				display.clearDisplay();
 				display.setTextSize(1);
@@ -161,6 +195,20 @@ void loop() {
 				display.print("ID:      ");
 				display.println(animalId);
 				display.display();
+
+#elif defined(OLED_SEEED)
+
+        SeeedOled.clearDisplay();
+        SeeedOled.setTextXY(1,0);  
+        SeeedOled.putString("Country:");
+        SeeedOled.setTextXY(2,0);  
+        SeeedOled.putString(countryId.c_str());
+        SeeedOled.setTextXY(4,0);  
+        SeeedOled.putString("ID:");
+        SeeedOled.setTextXY(5,0);  
+        SeeedOled.putString(animalId.c_str());
+
+#endif
 
 				flashLED(255,0,0,1000,3);
 			}
@@ -380,3 +428,20 @@ char hexCharToDec( char c )
 	}
 	return -1;
 }
+
+#ifdef OLED_SEEED
+
+// Kludge to rotate the Grove screen by 180 deg. Use if needed
+void rotateOLED(void)
+{
+  SeeedOled.sendCommand(0xA8);
+  SeeedOled.sendCommand(0x3F);
+  
+  SeeedOled.sendCommand(0xA0);
+  SeeedOled.sendCommand(0xC9);
+  
+  SeeedOled.sendCommand(0xA0);
+  SeeedOled.sendCommand(0xA1);  
+}
+
+#endif
